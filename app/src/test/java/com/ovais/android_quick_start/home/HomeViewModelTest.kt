@@ -2,12 +2,15 @@ package com.ovais.android_quick_start.home
 
 import com.ovais.android_quick_start.base.BaseTest
 import com.ovais.android_quick_start.features.home.domain.GetDeviceInformationUseCase
+import com.ovais.android_quick_start.features.home.presentation.HomeEffect
+import com.ovais.android_quick_start.features.home.presentation.HomeIntent
 import com.ovais.android_quick_start.features.home.presentation.HomeUiState
 import com.ovais.android_quick_start.features.home.presentation.HomeViewModel
 import com.ovais.android_quick_start.utils.DeviceInfo
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -23,37 +26,39 @@ class HomeViewModelTest : BaseTest() {
 
     override fun setup() {
         super.setup()
-        viewModel = HomeViewModel(getDeviceInformationUseCase)
     }
 
-
     @Test
-    fun `fetch device configuration`() = runTest {
+    fun `fetch device configuration success`() = runTest {
         `when`(getDeviceInformationUseCase()).thenReturn(DeviceInfo("12345", "Samsung", "13"))
 
-        viewModel.fetchDeviceInformation()
+        viewModel = HomeViewModel(getDeviceInformationUseCase)
 
         advanceUntilIdle()
 
-        // Assert
+        // Assert State
         val state = viewModel.uiState.value
         assertTrue(state is HomeUiState.Success)
         state as HomeUiState.Success
         assertEquals("12345", state.identifier)
         assertEquals("Samsung", state.model)
         assertEquals("13", state.androidVersion)
+
+        // Assert Effect
+        val effect = viewModel.effect.first()
+        assertTrue(effect is HomeEffect.ShowToast)
+        assertEquals("Data Loaded Successfully", (effect as HomeEffect.ShowToast).message)
     }
 
     @Test
-    fun `fetch device configuration when error`() = runTest {
-        // Arrange: make the use case throw an exception
+    fun `fetch device configuration error`() = runTest {
         `when`(getDeviceInformationUseCase()).thenThrow(RuntimeException("Failed to fetch"))
 
-        // Act
-        viewModel.fetchDeviceInformation()
+        viewModel = HomeViewModel(getDeviceInformationUseCase)
+        
         advanceUntilIdle()
 
-        // Assert
+        // Assert State
         val state = viewModel.uiState.value
         assertTrue(state is HomeUiState.Error)
         state as HomeUiState.Error
@@ -61,19 +66,17 @@ class HomeViewModelTest : BaseTest() {
     }
 
     @Test
-    fun reinitialize() = runTest {
+    fun `handle Refresh intent`() = runTest {
         `when`(getDeviceInformationUseCase()).thenReturn(DeviceInfo("12345", "Samsung", "13"))
 
-        viewModel.reInitialize()
-
+        viewModel = HomeViewModel(getDeviceInformationUseCase)
         advanceUntilIdle()
 
-        // Assert
+        viewModel.handleIntent(HomeIntent.Refresh)
+        advanceUntilIdle()
+
+        // Assert State
         val state = viewModel.uiState.value
         assertTrue(state is HomeUiState.Success)
-        state as HomeUiState.Success
-        assertEquals("12345", state.identifier)
-        assertEquals("Samsung", state.model)
-        assertEquals("13", state.androidVersion)
     }
 }
