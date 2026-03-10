@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.ovais.android_quick_start.utils.shimmer
 
@@ -43,6 +44,7 @@ fun LoadingItem() {
                 .size(60.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .shimmer()
+                .testTag("loading_item")
         )
 
         Spacer(modifier = Modifier.width(12.dp))

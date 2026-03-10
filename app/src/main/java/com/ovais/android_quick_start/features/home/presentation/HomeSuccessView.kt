@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -66,7 +67,9 @@ fun HomeSuccessView(
                     onClick = {
                         onNextClick(model, identifier, androidVersion)
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("continue_button")
                 ) {
                     Text("Continue")
                 }
@@ -78,7 +81,9 @@ fun HomeSuccessView(
 @Composable
 fun InfoRow(label: String, value: String) {
 
-    Column {
+    Column(
+        modifier = Modifier.testTag("info_row_$label")
+    ) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelMedium,

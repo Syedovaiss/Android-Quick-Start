@@ -28,7 +28,9 @@ fun HomeScreen(
             val state = (uiState as HomeUiState.Error)
             HomeErrorView(
                 message = state.message,
-                onRetry = {}
+                onRetry = {
+                    viewModel.reInitialize()
+                }
             )
         }
     }

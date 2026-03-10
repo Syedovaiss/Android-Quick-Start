@@ -11,12 +11,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class HomeViewModel(
+open class HomeViewModel(
     private val getDeviceInformationUseCase: GetDeviceInformationUseCase
 ) : ViewModel() {
 
     private val _uiState by lazy { MutableStateFlow<HomeUiState>(HomeUiState.Loading) }
-    val uiState: StateFlow<HomeUiState>
+    open val uiState: StateFlow<HomeUiState>
         get() = _uiState.asStateFlow()
 
     init {
@@ -42,5 +42,9 @@ class HomeViewModel(
                 }
             }
         }
+    }
+
+    fun reInitialize() {
+        fetchDeviceInformation()
     }
 }
