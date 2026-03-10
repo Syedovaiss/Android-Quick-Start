@@ -1,6 +1,5 @@
 package com.ovais.android_quick_start.home
 
-
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -8,13 +7,18 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ovais.android_quick_start.HiltTestActivity
+import com.ovais.android_quick_start.features.home.presentation.HomeEffect
+import com.ovais.android_quick_start.features.home.presentation.HomeIntent
 import com.ovais.android_quick_start.features.home.presentation.HomeScreen
 import com.ovais.android_quick_start.features.home.presentation.HomeUiState
 import com.ovais.android_quick_start.features.home.presentation.HomeViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,8 +39,21 @@ class HomeScreenTest {
         private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
         override val uiState: StateFlow<HomeUiState> = _uiState
 
+        private val _effect = Channel<HomeEffect>()
+        override val effect: Flow<HomeEffect> = _effect.receiveAsFlow()
+
+        var lastIntent: HomeIntent? = null
+
+        override fun handleIntent(intent: HomeIntent) {
+            lastIntent = intent
+        }
+
         fun setState(state: HomeUiState) {
             _uiState.value = state
+        }
+        
+        suspend fun sendEffect(effect: HomeEffect) {
+            _effect.send(effect)
         }
     }
 
@@ -59,8 +76,6 @@ class HomeScreenTest {
             )
         }
 
-        // Make sure your loading view has this tag in your Compose code:
-        // Modifier.testTag("HomeLoadingView")
         composeRule.onNodeWithTag("HomeLoadingView").assertIsDisplayed()
     }
 
@@ -85,8 +100,6 @@ class HomeScreenTest {
             )
         }
 
-        // Tags you must set in your SuccessView Composables:
-        // ModelText, IdentifierText, VersionText, HomeSuccessView
         composeRule.onNodeWithTag("HomeSuccessView").assertIsDisplayed()
         composeRule.onNodeWithTag("ModelText").assertTextEquals(model)
         composeRule.onNodeWithTag("IdentifierText").assertTextEquals(identifier)
@@ -106,12 +119,11 @@ class HomeScreenTest {
             )
         }
 
-        // Tags required in your ErrorView composables:
-        // HomeErrorView, ErrorMessage, RetryButton
         composeRule.onNodeWithTag("HomeErrorView").assertIsDisplayed()
         composeRule.onNodeWithTag("ErrorMessage").assertTextEquals(errorMessage)
 
         composeRule.onNodeWithTag("RetryButton").performClick()
-        // Optionally assert ViewModel reInitialize called
+        
+        assert(fakeViewModel.lastIntent is HomeIntent.Refresh)
     }
 }
