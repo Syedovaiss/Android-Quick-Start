@@ -1,5 +1,6 @@
 package com.ovais.android_quick_start.features.home.presentation
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ovais.android_quick_start.features.home.domain.GetDeviceInformationUseCase
@@ -23,7 +24,8 @@ open class HomeViewModel(
         fetchDeviceInformation()
     }
 
-    private fun fetchDeviceInformation() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun fetchDeviceInformation() {
         viewModelScope.launch {
             try {
                 delay(1500)

@@ -42,6 +42,11 @@ android {
     kotlin {
         jvmToolchain(17)
     }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -53,6 +58,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -84,4 +90,16 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    //Mockito
+    testImplementation(libs.mockito.kotlin)
+    //MockK
+    testImplementation(libs.mockk)
+    //Turbine
+    testImplementation(libs.turbine)
+    //Coroutine Test
+    testImplementation(libs.kotlinx.coroutines.test)
+    //Core testing
+    testImplementation(libs.androidx.core.testing)
+    //Robo-electric
+    testImplementation(libs.robolectric)
 }
