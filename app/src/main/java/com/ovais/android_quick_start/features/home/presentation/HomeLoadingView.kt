@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.ovais.android_quick_start.utils.shimmer
 
@@ -23,6 +24,7 @@ fun HomeLoadingView() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .testTag("HomeLoadingView")
     ) {
 
         repeat(4) {

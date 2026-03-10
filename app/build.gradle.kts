@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.dagger.hilt.android")         // Hilt
+    id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
 }
 
@@ -20,7 +20,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.ovais.android_quick_start.HiltTestRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
 
     buildTypes {
@@ -85,4 +86,19 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    //Mockito
+    testImplementation(libs.mockito.kotlin)
+    //MockK
+    testImplementation(libs.mockk)
+    //Turbine
+    testImplementation(libs.turbine)
+    //Coroutine Test
+    testImplementation(libs.kotlinx.coroutines.test)
+    //Core testing
+    testImplementation(libs.androidx.core.testing)
+    //Robo-electric
+    testImplementation(libs.robolectric)
+    //Hilt
+    androidTestImplementation(libs.hilt.android.testing)
+    kspAndroidTest(libs.hilt.android.compiler)
 }

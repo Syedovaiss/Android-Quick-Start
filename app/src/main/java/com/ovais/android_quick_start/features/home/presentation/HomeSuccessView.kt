@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -29,7 +30,8 @@ fun HomeSuccessView(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag("HomeSuccessView"),
         contentAlignment = Alignment.Center
     ) {
 
@@ -50,23 +52,23 @@ fun HomeSuccessView(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                InfoRow("📱 Model", model)
+                InfoRow("📱 Model", model, valueTag = "ModelText")
+                Spacer(modifier = Modifier.height(12.dp))
+
+                InfoRow("🆔 Identifier", identifier, valueTag = "IdentifierText")
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                InfoRow("🆔 Identifier", identifier)
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                InfoRow("🤖 Android Version", androidVersion)
-
+                InfoRow("🤖 Android Version", androidVersion, valueTag = "VersionText")
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
                     onClick = {
                         onNextClick(model, identifier, androidVersion)
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("ContinueButton")
                 ) {
                     Text("Continue")
                 }
@@ -74,10 +76,8 @@ fun HomeSuccessView(
         }
     }
 }
-
 @Composable
-fun InfoRow(label: String, value: String) {
-
+fun InfoRow(label: String, value: String, valueTag: String? = null) {
     Column {
         Text(
             text = label,
@@ -87,7 +87,8 @@ fun InfoRow(label: String, value: String) {
 
         Text(
             text = value,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = valueTag?.let { Modifier.testTag(it) } ?: Modifier
         )
     }
 }

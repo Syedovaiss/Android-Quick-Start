@@ -1,5 +1,6 @@
 package com.ovais.android_quick_start.features.home.presentation
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ovais.android_quick_start.features.home.domain.GetDeviceInformationUseCase
@@ -14,19 +15,19 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+open class HomeViewModel @Inject constructor(
     private val getDeviceInformationUseCase: GetDeviceInformationUseCase
 ) : ViewModel() {
 
     private val _uiState by lazy { MutableStateFlow<HomeUiState>(HomeUiState.Loading) }
-    val uiState: StateFlow<HomeUiState>
+    open val uiState: StateFlow<HomeUiState>
         get() = _uiState.asStateFlow()
 
     init {
         fetchDeviceInformation()
     }
-
-    private fun fetchDeviceInformation() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+     fun fetchDeviceInformation() {
         viewModelScope.launch {
             try {
                 delay(1500)
@@ -45,5 +46,8 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+    }
+    fun reInitialize() {
+        fetchDeviceInformation()
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.ovais.android_quick_start.R
@@ -69,23 +70,23 @@ fun DetailScreen(
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
 
-                DetailRow("Name", name)
+                DetailRow("Name", name, valueTag = "NameText")
 
                 Spacer(modifier = Modifier.height(12.dp))
-                DetailRow("Model", model)
+                DetailRow("Model", model, valueTag = "ModelText")
 
                 Spacer(modifier = Modifier.height(12.dp))
-                DetailRow("Identifier", identifier)
+                DetailRow("Identifier", identifier, valueTag = "IdentifierText")
 
                 Spacer(modifier = Modifier.height(12.dp))
-                DetailRow("Android Version", version)
+                DetailRow("Android Version", version, valueTag = "VersionText")
             }
         }
     }
 }
 
 @Composable
-fun DetailRow(label: String, value: String) {
+fun DetailRow(label: String, value: String, valueTag: String? = null) {
     Column {
         Text(
             text = label,
@@ -95,7 +96,8 @@ fun DetailRow(label: String, value: String) {
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = value,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = valueTag?.let { Modifier.testTag(it) } ?: Modifier
         )
     }
 }

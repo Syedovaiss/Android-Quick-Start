@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -26,7 +27,8 @@ fun HomeErrorView(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f)),
+            .background(Color.Black.copy(alpha = 0.5f))
+            .testTag("HomeErrorView"),
         contentAlignment = Alignment.Center
     ) {
 
@@ -52,13 +54,15 @@ fun HomeErrorView(
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.DarkGray
+                color = Color.DarkGray,
+                modifier = Modifier.testTag("ErrorMessage")
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
-                onClick = onRetry
+                onClick = onRetry,
+                modifier = Modifier.testTag("RetryButton")
             ) {
                 Text("Retry")
             }
