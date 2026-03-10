@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
 interface DeviceConfigurationManager {
     val deviceIdentifier: String
@@ -13,8 +11,8 @@ interface DeviceConfigurationManager {
     val androidVersion: String
 }
 
-class DefaultDeviceConfigurationManager @Inject constructor(
-    @param:ApplicationContext private val context: Context
+class DefaultDeviceConfigurationManager(
+    private val context: Context
 ) : DeviceConfigurationManager {
     override val deviceIdentifier: String
         @SuppressLint("HardwareIds")

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.dagger.hilt.android")         // Hilt
     id("com.google.devtools.ksp")
 }
 
@@ -63,11 +62,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     // App Startup
     implementation(libs.androidx.startup.runtime)
-    // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.work)
-    implementation(libs.androidx.hilt.navigation.compose)
+    //Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.compose.navigation)
+    implementation(libs.koin.compose.viewmodel)
     // Room
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)

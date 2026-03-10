@@ -37,6 +37,9 @@
             <meta-data
                 android:name="com.ovais.android_quick_start.core.initializers.StrictModeInitializer"
                 android:value="androidx.startup" />
+            <meta-data
+                android:name="com.ovais.android_quick_start.core.initializers.KoinInitializer"
+                android:value="androidx.startup" />
         </provider>
     </application>
 
